@@ -21,6 +21,7 @@ import Lexer
     "||"            { TokenOr }
     '('             { TokenLParen }
     ')'             { TokenRParen }
+    "if"            { TokenIf }
 
 %% 
 
@@ -32,6 +33,7 @@ Exp     : num           { Num $1 }
         | Exp "&&" Exp  { And $1 $3 }
         | Exp "||" Exp  { Or $1 $3 }
         | '(' Exp ')'   { Paren $2 }
+        | "if" Exp '(' Exp ')' '(' Exp ')' { If $2 $4 $7 }
 
 { 
 

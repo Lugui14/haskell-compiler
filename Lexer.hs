@@ -10,7 +10,8 @@ data Token = TokenNum Int
            | TokenAnd 
            | TokenOr 
            | TokenLParen 
-           | TokenRParen 
+           | TokenRParen
+           | TokenIf 
            deriving Show 
 
 data Expr = Num Int 
@@ -39,7 +40,8 @@ lexer ('*':cs) = TokenTimes : lexer cs
 lexer ('(':cs) = TokenLParen : lexer cs 
 lexer (')':cs) = TokenRParen : lexer cs
 lexer ('&':'&':cs) = TokenAnd : lexer cs 
-lexer ('|':'|':cs) = TokenOr : lexer cs  
+lexer ('|':'|':cs) = TokenOr : lexer cs
+lexer ('i':'f':cs) = TokenIf : lexer cs
 lexer (c:cs) | isSpace c = lexer cs 
              | isDigit c = lexNum (c:cs)
              | isAlpha c = lexKw (c:cs)
