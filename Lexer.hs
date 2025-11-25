@@ -29,7 +29,7 @@ data Expr = Num Int
 
 data Ty = TNum 
         | TBool 
-        | TFun Ty Ty
+        | TFun Ty Ty 
         deriving (Show, Eq) 
 
 lexer :: String -> [Token]
