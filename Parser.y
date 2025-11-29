@@ -19,6 +19,9 @@ import Lexer
     '*'             { TokenTimes }
     "&&"            { TokenAnd }
     "||"            { TokenOr }
+    '['             { TokenLBrack }
+    ']'             { TokenRBrack }
+    ','             { TokenComma }
     '('             { TokenLParen }
     ')'             { TokenRParen }
     "if"            { TokenIf }
@@ -33,7 +36,12 @@ Exp     : num           { Num $1 }
         | Exp "&&" Exp  { And $1 $3 }
         | Exp "||" Exp  { Or $1 $3 }
         | '(' Exp ')'   { Paren $2 }
+        | '[' ']'       { List [] }
+        | '[' ListExps ']' { List $2 }
         | "if" Exp '(' Exp ')' '(' Exp ')' { If $2 $4 $7 }
+
+ListExps : Exp                    { [$1] }
+     | ListExps ',' Exp        { $1 ++ [$3] }
 
 { 
 

@@ -8,6 +8,7 @@ isValue BTrue  = True
 isValue BFalse = True 
 isValue (Num _) = True 
 isValue (Lam _ _ _) = True 
+isValue (List es) = all isValue es
 isValue _ = False 
 
 subst :: String -> Expr -> Expr -> Expr 
@@ -24,6 +25,8 @@ subst x s (Add t1 t2) = Add (subst x s t1) (subst x s t2)
 subst x s (Times t1 t2) = Times (subst x s t1) (subst x s t2)
 subst x s (And t1 t2) = And (subst x s t1) (subst x s t2)
 subst x s (Or t1 t2) = Or (subst x s t1) (subst x s t2)
+subst x s (Paren e) = Paren (subst x s e)
+subst x s (List es) = List (map (subst x s) es)
 -- Completar subst para outros termos da linguagem -- feito times e or
 
 step :: Expr -> Expr 
@@ -42,6 +45,13 @@ step (And e1 e2) = And (step e1) e2
 step (Or BFalse e2) = e2 
 step (Or BTrue e2) = BTrue
 step (Or e1 e2) = Or (step e1) e2
+step (Paren e) = step e
+step (List []) = List []
+step (List (e:es)) = if isValue e then
+                       case step (List es) of
+                         List es' -> List (e:es')
+                     else
+                       List (step e : es)
 -- Implementar step para Or -- feito
 step (If BTrue e1 e2) = e1
 step (If BFalse e1 e2) = e2

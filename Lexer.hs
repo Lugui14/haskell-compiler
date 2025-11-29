@@ -9,6 +9,9 @@ data Token = TokenNum Int
            | TokenTimes 
            | TokenAnd 
            | TokenOr 
+           | TokenLBrack
+           | TokenRBrack
+           | TokenComma
            | TokenLParen 
            | TokenRParen
            | TokenIf 
@@ -22,6 +25,7 @@ data Expr = Num Int
           | And Expr Expr 
           | Or Expr Expr 
           | Paren Expr 
+          | List [Expr]
           | If Expr Expr Expr 
           | Var String
           | Lam String Ty Expr 
@@ -31,6 +35,7 @@ data Expr = Num Int
 data Ty = TNum 
         | TBool 
         | TFun Ty Ty 
+        | TList Ty
         deriving (Show, Eq) 
 
 lexer :: String -> [Token]
@@ -39,6 +44,9 @@ lexer ('+':cs) = TokenPlus : lexer cs
 lexer ('*':cs) = TokenTimes : lexer cs 
 lexer ('(':cs) = TokenLParen : lexer cs 
 lexer (')':cs) = TokenRParen : lexer cs
+lexer ('[':cs) = TokenLBrack : lexer cs
+lexer (']':cs) = TokenRBrack : lexer cs
+lexer (',':cs) = TokenComma : lexer cs
 lexer ('&':'&':cs) = TokenAnd : lexer cs 
 lexer ('|':'|':cs) = TokenOr : lexer cs
 lexer ('i':'f':cs) = TokenIf : lexer cs

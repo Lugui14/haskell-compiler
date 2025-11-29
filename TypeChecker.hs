@@ -8,6 +8,11 @@ typeof :: Ctx -> Expr -> Maybe Ty
 typeof ctx BTrue = Just TBool 
 typeof ctx BFalse = Just TBool 
 typeof ctx (Num n) = Just TNum 
+typeof ctx (List []) = Just (TList TNum)
+typeof ctx (List (e:es)) = case typeof ctx e of
+                              Just t -> let rest = map (typeof ctx) es in
+                                         if all (== Just t) rest then Just (TList t) else Nothing
+                              _ -> Nothing
 typeof ctx (Add e1 e2) = case (typeof ctx e1, typeof ctx e2) of 
                            (Just TNum, Just TNum) -> Just TNum 
                            _                      -> Nothing
@@ -22,6 +27,7 @@ typeof ctx (Or e1 e2) = case (typeof ctx e1, typeof ctx e2) of
                            (Just TBool, Just TBool) -> Just TBool 
                            _                        -> Nothing
 -- Implementar typeof para Or -- feito
+typeof ctx (Paren e) = typeof ctx e
 typeof ctx (If e e1 e2) = case typeof ctx e of 
                             Just TBool -> case (typeof ctx e1, typeof ctx e2) of 
                                             (Just t1, Just t2) | t1 == t2  -> Just t1 
