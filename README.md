@@ -1,7 +1,9 @@
 # Haskell Compiler
 
 A simple compiler for a small functional language written in Haskell, featuring lexical analysis, parsing, type checking, and interpretation.
+
 The key implementation for the LP class is the implementation of the List functionality
+
 Developed by Luiz Guilherme Zanella Lopes & Tiago Azevedo
 
 ## Features
