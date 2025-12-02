@@ -1,29 +1,3 @@
-# GHC build artifacts
-*.hi
-*.o
-*.dyn_o
-*.dyn_hi
-
-# Profiling and intermediate files
-*.prof
-*.hp
-*.eventlog
-
-# Common build directories
-dist/
-dist-newstyle/
-.stack-work/
-.cabal-sandbox/
-
-# Cabal / package files
-*.tar.gz
-.ghc.environment.*
-
-# Executables produced by ghc
 hc
 *.exe
-
-# Editor temp files
-*~
-.#*
-.DS_Store
+.vscode
