@@ -4,7 +4,7 @@ HERE="$(cd "$(dirname "$0")" && pwd)"
 PARENT="$HERE/.."
 
 cd "$PARENT"
-for file in "$HERE"/example*.fonte; do
+for file in $(ls "$HERE"/example*.fonte | sort -V); do
   if [ -f "$file" ]; then
     runhaskell Main.hs < "$file"
     echo ""

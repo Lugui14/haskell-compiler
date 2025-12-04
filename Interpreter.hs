@@ -26,6 +26,7 @@ subst x s (Times t1 t2) = Times (subst x s t1) (subst x s t2)
 subst x s (And t1 t2) = And (subst x s t1) (subst x s t2)
 subst x s (Or t1 t2) = Or (subst x s t1) (subst x s t2)
 subst x s (Paren e) = Paren (subst x s e)
+subst x s (If e1 e2 e3) = If (subst x s e1) (subst x s e2) (subst x s e3)
 subst x s (List es) = List (map (subst x s) es)
 -- Completar subst para outros termos da linguagem -- feito times e or
 
@@ -61,8 +62,13 @@ step (App (Lam x tp e1) e2) = if (isValue e2) then
                                 subst x e2 e1 
                               else 
                                 App (Lam x tp e1) (step e2)
+step (App e1 e2) = App (step e1) e2
+step e = e
 
 eval :: Expr -> Expr
+--eval (App e1@(Lam x ty b) e2) | isValue e2 = eval (subst x e2 b)
+--                              | otherwise   = (App e1 (eval e2))
+--eval (App e1 e2) = App (eval e1) e2
 eval e = if isValue e then 
            e
          else 

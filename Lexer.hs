@@ -14,7 +14,12 @@ data Token = TokenNum Int
            | TokenComma
            | TokenLParen 
            | TokenRParen
-           | TokenIf 
+           | TokenIf
+           | TokenArrow
+           | TokenVar String
+           | TokenTNum
+           | TokenTBool
+           | TokenColon
            deriving Show 
 
 data Expr = Num Int 
@@ -47,9 +52,11 @@ lexer (')':cs) = TokenRParen : lexer cs
 lexer ('[':cs) = TokenLBrack : lexer cs
 lexer (']':cs) = TokenRBrack : lexer cs
 lexer (',':cs) = TokenComma : lexer cs
-lexer ('&':'&':cs) = TokenAnd : lexer cs 
+lexer ('&':'&':cs) = TokenAnd : lexer cs
 lexer ('|':'|':cs) = TokenOr : lexer cs
 lexer ('i':'f':cs) = TokenIf : lexer cs
+lexer ('-':'>':cs) = TokenArrow : lexer cs
+lexer (':':cs) = TokenColon : lexer cs
 lexer (c:cs) | isSpace c = lexer cs 
              | isDigit c = lexNum (c:cs)
              | isAlpha c = lexKw (c:cs)
@@ -60,4 +67,7 @@ lexNum cs = case span isDigit cs of
 
 lexKw cs = case span isAlpha cs of 
              ("true", rest) -> TokenTrue : lexer rest 
-             ("false", rest) -> TokenFalse : lexer rest 
+             ("false", rest) -> TokenFalse : lexer rest
+             ("Num", rest) -> TokenTNum : lexer rest
+             ("Bool", rest) -> TokenTBool : lexer rest
+             (var, rest) -> TokenVar var : lexer rest 
